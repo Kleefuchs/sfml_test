@@ -17,12 +17,13 @@ int main() {
     sf::Clock kissTimer;
     sf::RenderWindow window(sf::VideoMode({1920, 1080}),
                             "Boykisser Game UwU :3");
-    // window.setFramerateLimit(180);
+    window.setFramerateLimit(180);
 
     sf::Texture backgroundTexture("../assets/background");
     sf::Sprite background(backgroundTexture);
 
     sf::Texture kissHeartTexture("../assets/kiss_heart");
+    kissHeartTexture.setSmooth(true);
     std::vector<std::optional<sf::Sprite>> kissHearts;
     SimpleSpriteBatcher kissHeartsBatcher;
     kissHeartsBatcher.texture = &kissHeartTexture;
@@ -39,7 +40,7 @@ int main() {
     boykisserBatcher.texture = &boykisserTexture;
     std::vector<sf::Sprite> boykissers;
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 50; i++) {
         sf::Sprite boykisser(boykisserTexture);
         boykisser.setPosition(
             {(float)(std::rand() % 1800), (float)(std::rand() % 900)});
