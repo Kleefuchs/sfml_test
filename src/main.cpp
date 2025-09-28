@@ -14,12 +14,19 @@
 #include "foreign/SimpleSpriteBatcher.hpp"
 
 int main() {
+    sf::Clock kissTimer;
     sf::RenderWindow window(sf::VideoMode({1920, 1080}),
                             "Boykisser Game UwU :3");
     window.setFramerateLimit(180);
+
     sf::Texture backgroundTexture("../assets/background");
     sf::Sprite background(backgroundTexture);
-    SimpleSpriteBatcher ssBatcher;
+
+    sf::Texture kissHeartTexture("../assets/kiss_heart");
+    std::vector<sf::Sprite> kissHearts;
+    SimpleSpriteBatcher kissHeartsBatcher;
+    kissHeartsBatcher.texture = &kissHeartTexture;
+
     std::srand(std::time({}));
     sf::Clock deltaTimeClock;
     sf::Texture playerTexture("../assets/player");
@@ -28,7 +35,8 @@ int main() {
 
     sf::Texture boykisserTexture("../assets/boykisser");
     boykisserTexture.setSmooth(true);
-    ssBatcher.texture = &boykisserTexture;
+    SimpleSpriteBatcher boykisserBatcher;
+    boykisserBatcher.texture = &boykisserTexture;
     std::vector<sf::Sprite> boykissers;
 
     for (int i = 0; i < 10; i++) {
@@ -45,6 +53,21 @@ int main() {
                 window.close();
         }
 
+        for (size_t i = 0; i < boykissers.size(); i++) {
+            if (player.getGlobalBounds().findIntersection(
+                    boykissers[i].getGlobalBounds())) {
+                if (kissTimer.getElapsedTime().asMilliseconds() > 500) {
+                    sf::Sprite kissHeart(kissHeartTexture);
+                    kissHeart.setPosition(player.getPosition());
+                    kissHearts.push_back(kissHeart);
+                }
+            }
+        }
+
+        if (kissTimer.getElapsedTime().asMilliseconds() > 500) {
+            kissTimer.restart();
+        }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
             player.move({-200.f * deltaTime, 0.f});
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
@@ -56,9 +79,11 @@ int main() {
 
         window.clear();
         window.draw(background);
-        ssBatcher.batchSprites(boykissers);
-        window.draw(ssBatcher);
+        kissHeartsBatcher.batchSprites(kissHearts);
+        boykisserBatcher.batchSprites(boykissers);
+        window.draw(boykisserBatcher);
         window.draw(player);
+        window.draw(kissHeartsBatcher);
         window.display();
     }
 }
