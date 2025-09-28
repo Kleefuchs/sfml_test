@@ -1,7 +1,7 @@
 CMakeFiles
 _deps/
 target/
-build/bin
+build/bin/
 CMakeCache.txt
 Makefile
 cmake_install.cmake
