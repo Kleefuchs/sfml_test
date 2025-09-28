@@ -16,14 +16,18 @@
 int main() {
     sf::RenderWindow window(sf::VideoMode({1920, 1080}),
                             "Boykisser Game UwU :3");
+    window.setFramerateLimit(180);
+    sf::Texture backgroundTexture("../assets/background");
+    sf::Sprite background(backgroundTexture);
     SimpleSpriteBatcher ssBatcher;
     std::srand(std::time({}));
     sf::Clock deltaTimeClock;
-    sf::Texture playerTexture("../assets/player.png");
+    sf::Texture playerTexture("../assets/player");
+    playerTexture.setSmooth(true);
     sf::Sprite player(playerTexture);
 
-    sf::Texture boykisserTexture("../assets/boykisser.png");
-    boykisserTexture.setSmooth(false);
+    sf::Texture boykisserTexture("../assets/boykisser");
+    boykisserTexture.setSmooth(true);
     ssBatcher.texture = &boykisserTexture;
     std::vector<sf::Sprite> boykissers;
 
@@ -51,6 +55,7 @@ int main() {
             player.move({0.0f, -200.f * deltaTime});
 
         window.clear();
+        window.draw(background);
         ssBatcher.batchSprites(boykissers);
         window.draw(ssBatcher);
         window.draw(player);
