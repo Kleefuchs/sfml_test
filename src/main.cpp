@@ -17,13 +17,13 @@ int main() {
     sf::Clock kissTimer;
     sf::RenderWindow window(sf::VideoMode({1920, 1080}),
                             "Boykisser Game UwU :3");
-    window.setFramerateLimit(180);
+    // window.setFramerateLimit(180);
 
     sf::Texture backgroundTexture("../assets/background");
     sf::Sprite background(backgroundTexture);
 
     sf::Texture kissHeartTexture("../assets/kiss_heart");
-    std::vector<sf::Sprite> kissHearts;
+    std::vector<std::optional<sf::Sprite>> kissHearts;
     SimpleSpriteBatcher kissHeartsBatcher;
     kissHeartsBatcher.texture = &kissHeartTexture;
 
@@ -39,7 +39,7 @@ int main() {
     boykisserBatcher.texture = &boykisserTexture;
     std::vector<sf::Sprite> boykissers;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 20; i++) {
         sf::Sprite boykisser(boykisserTexture);
         boykisser.setPosition(
             {(float)(std::rand() % 1800), (float)(std::rand() % 900)});
@@ -68,6 +68,21 @@ int main() {
             kissTimer.restart();
         }
 
+        for (size_t i = 0; i < kissHearts.size(); i++) {
+            if (!kissHearts[i].has_value()) {
+                continue;
+            }
+            if (kissHearts[i]->getPosition().y - player.getPosition().y < -250) {
+                kissHearts[i] = std::nullopt;
+            } else {
+                kissHearts[i]->move({(float) (rand() % 400 - 200) * deltaTime, -50.0f * deltaTime});
+            }
+        }
+
+        if (kissHearts.size() > 100000) {
+            kissHearts.clear();
+        }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
             player.move({-200.f * deltaTime, 0.f});
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
@@ -79,11 +94,16 @@ int main() {
 
         window.clear();
         window.draw(background);
-        kissHeartsBatcher.batchSprites(kissHearts);
         boykisserBatcher.batchSprites(boykissers);
         window.draw(boykisserBatcher);
         window.draw(player);
         window.draw(kissHeartsBatcher);
+        for (size_t i = 0; i < kissHearts.size(); i++) {
+            if (!kissHearts[i].has_value()) {
+                continue;
+            }
+            window.draw(*kissHearts[i]);
+        }
         window.display();
     }
 }

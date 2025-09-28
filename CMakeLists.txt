@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.12)
 set(PROJECT_NAME "boykissies")
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall -g ")
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall -g3")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall")
 
 project(${PROJECT_NAME})
