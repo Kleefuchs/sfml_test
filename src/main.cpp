@@ -18,7 +18,7 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
-#define NUMBER_OF_BOYKISSERS 100000
+#define NUMBER_OF_BOYKISSERS 50
 
 void draw(sf::RenderWindow* window, sf::Sprite* background, sf::Sprite* player,
           std::vector<sf::Sprite>* boykissers,
@@ -94,7 +94,7 @@ int main() {
     sf::Clock kissTimer;
     sf::RenderWindow window(sf::VideoMode({WIDTH, HEIGHT}),
                             "Boykisser Game UwU :3");
-    // window.setFramerateLimit(180);
+    window.setFramerateLimit(180);
 
     sf::Texture backgroundTexture("../assets/background");
     sf::Sprite background(backgroundTexture);
